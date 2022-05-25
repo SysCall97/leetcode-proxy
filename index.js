@@ -17,4 +17,4 @@ app.get('/', (req, res) => {
 
 app.use('/getLink', getLinkRouter)
 
-app.listen(PORT);
+app.listen(process.env.PORT || PORT);
