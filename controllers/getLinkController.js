@@ -14,27 +14,7 @@ const getInit = async () => {
     const DAILY_CODING_CHALLENGE_QUERY = `
         query questionOfToday {
             activeDailyCodingChallengeQuestion {
-                date
-                userStatus
                 link
-                question {
-                    acRate
-                    difficulty
-                    freqBar
-                    frontendQuestionId: questionFrontendId
-                    isFavor
-                    paidOnly: isPaidOnly
-                    status
-                    title
-                    titleSlug
-                    hasVideoSolution
-                    hasSolution
-                    topicTags {
-                        name
-                        id
-                        slug
-                    }
-                }
             }
         }`;
     return {
@@ -45,13 +25,16 @@ const getInit = async () => {
 }
 
 const fetchDailyCodingChallenge = async () => {
-    return new Promise(async function (reject, resolve) {
+    return new Promise(async function (resolve, reject) {
         const LEETCODE_API_ENDPOINT = 'https://leetcode.com/graphql';
-        const init = await getInit();
-        fetch(LEETCODE_API_ENDPOINT, init)
-        .then(response => response.json())
-        .then(data => resolve(`https://leetcode.com${data.data.activeDailyCodingChallengeQuestion.link}`))
-        .catch(err => reject(err));
+        try {
+            const init = await getInit();
+            const response = await fetch(LEETCODE_API_ENDPOINT, init);
+            data = await response.json();
+            resolve(`https://leetcode.com${data.data.activeDailyCodingChallengeQuestion.link}`);
+        } catch (error) {
+            reject(error)
+        }
       });
 }
 
